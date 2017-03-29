@@ -1,0 +1,6 @@
+<h1>All Auctions</h1>
+
+ <% @auctions.each do |a| %>
+  <%= link_to a.title, auction_path(a) %>
+  <hr>
+<% end %>

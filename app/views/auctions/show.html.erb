@@ -1,0 +1,65 @@
+<h1><%= @auction.title %></h1>
+<p><%= @auction.details %></p>
+<p>Ends on: <%= @auction.ends_on %></p>
+
+<% if @auction.aasm_state == 'reserve_not_met' || @auction.aasm_state == 'draft' || @auction.aasm_state == 'published'%>
+  <p> <%= @auction.aasm_state %></p>
+  <p>Reserve Not Met</p>
+<% elsif @auction.aasm_state == 'reserve_met'%>
+  <p>Reserve Met</p>
+<% end %>
+
+<p>Current Price: <%= @auction.current_price %></p>
+
+
+<% if user_signed_in? && can?(:manage, @auction) %>
+  <% if @auction.aasm_state == 'draft' %>
+    <%= link_to "Publish", auction_publish_path(@auction), method: :patch %>
+  <% end %>
+  <%= link_to 'Delete', auction_path(@auction),
+                      method: :delete,
+                      data: {confirm: 'Are you sure?'} %>
+<% end %>
+
+<div>
+
+<% if user_signed_in? && can?(:watch, @auction) %>
+
+  <% if @auction.watched_by?(current_user) %>
+
+    <%= link_to watch_path(@auction.watch_for(current_user)), method: :delete, class: "btn btn-default" do %>
+
+      <span class="glyphicon glyphicon-eye-open"></span>
+    <% end %>
+     <p>You are watching this auction.</p>
+  <% else %>
+
+    <%= link_to auction_watches_path(@auction), method: :post, class: "btn btn-default" do %>
+
+       <span class="glyphicon glyphicon-eye-open"></span>
+    <% end %>
+     <p>You are not watching this auction.</p>
+  <% end %>
+<% end %>
+
+
+<hr>
+<% if user_signed_in? && can?(:bid, @auction) && @auction.aasm_state != 'reserve_met' %>
+  <%= @bid.errors.full_messages.join(', ') %>
+  <%= form_for ([@auction, @bid]) do |b| %>
+    <div>
+      <%= b.label :bid %>
+      <%= b.number_field :bid %>
+    </div>
+    <%= b.submit %>
+  <% end %>
+    <hr>
+<% end %>
+  <h3>Previous Bids</h3>
+  <div id='bids'>
+     <% @auction.bids.each do |b| %>
+       <p>Bid:<%= b.bid %></p>
+       <p>Made by: <%= b.user.full_name %></p>
+       <p>Made on: <%= b.created_at.to_date.to_formatted_s(:long)  %></p>
+     <% end %>
+  </div>

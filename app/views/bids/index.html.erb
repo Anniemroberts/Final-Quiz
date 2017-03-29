@@ -1,0 +1,8 @@
+<%# @user && @user.full_name %>
+<h1>Bids made by <%= @user&.full_name %></h1>
+
+<ul>
+<% @auctions.each do |a| %>
+  <li><%= link_to a.title, a %>: <%=a.aasm_state%></li>
+<% end %>
+</ul>

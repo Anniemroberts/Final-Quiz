@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Amazon</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <a href="/auctions">Auctions</a>
+    <a href="/auctions/new">New</a>
+
+    <% if user_signed_in? %>
+      <span>Hello <%= current_user.full_name %>, </span>
+      <%= link_to 'Watched Auctions', user_watches_path(current_user) %>
+      <%= link_to 'Your Bids', user_bids_path(current_user) %>
+      <%#link_to 'Sign Out', session_path %>
+      <%= link_to 'Sign Out', sessions_path,
+                            method: :delete%>
+    <% else %>
+      <%= link_to 'Sign Up', new_user_path %>
+      <%= link_to 'Sign In', new_session_path %>
+    <% end %>
+    <hr>
+    <%= notice || alert %>
+    <div class='container'>
+      <%= yield %>
+    </div>
+  </body>
+</html>

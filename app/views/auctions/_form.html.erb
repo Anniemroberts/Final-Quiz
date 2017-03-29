@@ -1,0 +1,18 @@
+<%= form_for @auction do |a| %>
+  <div>
+    <%= a.label :title %>
+    <%= a.text_field :title %>
+  </div>
+  <div>
+    <%= a.label :details %>
+    <%= a.text_area :details %>
+  </div>
+  <div>
+    <%= a.label :reserve_price %>
+    <%= a.text_area :reserve_price %>
+  </div>
+  <div>
+    <%= a.text_field :ends_on, "data-provide" => 'datepicker' %>
+  </div>
+  <%= a.submit %>
+<% end %>
