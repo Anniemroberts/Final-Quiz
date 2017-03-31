@@ -57,7 +57,7 @@
 <% end %>
   <h3>Previous Bids</h3>
   <div id='bids'>
-     <% @auction.bids.each do |b| %>
+     <% @auction.bids.order(created_at: :desc).each do |b| %>
        <p>Bid:<%= b.bid %></p>
        <p>Made by: <%= b.user.full_name %></p>
        <p>Made on: <%= b.created_at.to_date.to_formatted_s(:long)  %></p>

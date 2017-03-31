@@ -1,5 +1,7 @@
 class BidsController < ApplicationController
+  require 'pry'
   before_action :authenticate_user!
+  attr_accessor :auction
 
   def index
     @user = User.find(params[:user_id])
@@ -14,20 +16,17 @@ class BidsController < ApplicationController
     if @bid_amount > @auction.current_price
       @bid.auction = @auction
       @auction.current_price = @bid_amount
+      @auction.save!
       @bid.user = current_user
       if @bid_amount >= @auction.reserve_price && @bid.save
         @auction.reserve_has_met!
         redirect_to auction_path(params[:auction_id]), notice: 'You have won this auction!'
-      elsif @bid.save
-        redirect_to auction_path(params[:auction_id]), notice: `Bid Created! #{@bid_amount}`
       else
-        flash[:alert] = 'please fix errors'
-        render 'auctions/show'
+        redirect_to auction_path(params[:auction_id]), notice: 'please fix errors'
       end
     else
       @bid.destroy
-      flash[:alert] = 'Bid must be higher than the current price.'
-      render 'auctions/show'
+      redirect_to auction_path(params[:auction_id]), notice: 'Bid must be higher than the current price.'
     end
   end
 

@@ -35,6 +35,7 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'aasm'
 gem 'bootstrap-datepicker-rails'
 gem 'factory_girl'
+gem 'pry'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
