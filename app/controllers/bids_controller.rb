@@ -1,7 +1,5 @@
 class BidsController < ApplicationController
-  require 'pry'
   before_action :authenticate_user!
-  attr_accessor :auction
 
   def index
     @user = User.find(params[:user_id])
